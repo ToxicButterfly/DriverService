@@ -54,9 +54,4 @@ public class DriverController {
     public ResponseEntity<DriverDTO> findAvailableDriver() throws UserNotFoundException {
         return driverService.findAvailableDriver();
     }
-
-//    @GetMapping("sendEmail")
-//    public void sendEmail() {
-//        driverService.sendEmail();
-//    }
 }
