@@ -2,6 +2,7 @@ package com.example.driverservice.service;
 
 import com.example.driverservice.convert.DriverDTOConverter;
 import com.example.driverservice.dao.DriverDAO;
+import com.example.driverservice.dto.BankDataDto;
 import com.example.driverservice.dto.DriverDTO;
 import com.example.driverservice.dto.LoginDTO;
 import com.example.driverservice.dto.request.RideRequest;
@@ -102,5 +103,15 @@ public class DriverService {
                     .build();
             driverProducer.sendMessage(request);
         }
+    }
+
+    public ResponseEntity<BankDataDto> getBankData() {
+        BankDataDto data = BankDataDto.builder()
+                .cvv("123")
+                .cardNumber("1234567890123456")
+                .expirationDate("12/26")
+                .balance(90000F)
+                .build();
+        return new ResponseEntity<>(data, HttpStatus.OK);
     }
 }

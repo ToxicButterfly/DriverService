@@ -1,5 +1,6 @@
 package com.example.driverservice.controller;
 
+import com.example.driverservice.dto.BankDataDto;
 import com.example.driverservice.dto.DriverDTO;
 import com.example.driverservice.dto.LoginDTO;
 import com.example.driverservice.exception.InvalidLoginException;
@@ -49,6 +50,12 @@ public class DriverController {
     public ResponseEntity<DriverDTO> changeStatus(@PathVariable int id) throws UserNotFoundException {
         return driverService.changeStatus(id);
     }
+
+    @GetMapping("{id}/bank")
+    public ResponseEntity<BankDataDto> getBankData(@PathVariable int id) {
+        return driverService.getBankData();
+    }
+
 
 //    @GetMapping("available")
 //    public ResponseEntity<DriverDTO> findAvailableDriver() throws UserNotFoundException {
