@@ -4,10 +4,12 @@ import com.example.driverservice.convert.DriverDTOConverter;
 import com.example.driverservice.dao.DriverDAO;
 import com.example.driverservice.dto.DriverDTO;
 import com.example.driverservice.dto.LoginDTO;
+import com.example.driverservice.dto.request.RideRequest;
 import com.example.driverservice.exception.InvalidLoginException;
 import com.example.driverservice.exception.UserNotFoundException;
+import com.example.driverservice.kafka.DriverProducer;
 import com.example.driverservice.model.Driver;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,12 +17,12 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
+@AllArgsConstructor
 public class DriverService {
 
-    @Autowired
-    DriverDAO driverDAO;
-    @Autowired
-    DriverDTOConverter driverDTOConverter;
+    private final DriverDAO driverDAO;
+    private final DriverDTOConverter driverDTOConverter;
+    private final DriverProducer driverProducer;
 
     public ResponseEntity<DriverDTO> register(Driver driver) throws InvalidLoginException {
         Optional<Driver> someone = driverDAO.findByEmailOrUsername(driver.getEmail(), driver.getUsername());
@@ -88,12 +90,17 @@ public class DriverService {
         else throw new UserNotFoundException("There's no such driver");
     }
 
-    public ResponseEntity<DriverDTO> findAvailableDriver() throws UserNotFoundException {
-        List<Driver> drivers = driverDAO.findAllByAvailability(true).get();
-        if (drivers.isEmpty())
-            throw new UserNotFoundException("There's no available driver at the moment");
-        Random random = new Random();
-        int r = random.nextInt(drivers.size());
-        return new ResponseEntity<>(driverDTOConverter.convertDriverToDriverDTO(drivers.get(r)), HttpStatus.OK);
+    public void findAvailableDriver(Integer id) {
+        List<Driver> drivers = driverDAO.findAllByAvailability(true);
+        if (!drivers.isEmpty()) {
+            Random random = new Random();
+            int r = random.nextInt(drivers.size());
+            RideRequest request = RideRequest.builder()
+                    .rideId(id)
+                    .driverId(drivers.get(r).getId())
+                    .driverRating(drivers.get(r).getRating())
+                    .build();
+            driverProducer.sendMessage(request);
+        }
     }
 }

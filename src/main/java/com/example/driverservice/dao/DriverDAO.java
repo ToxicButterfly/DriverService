@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface DriverDAO extends JpaRepository<Driver, Integer> {
 
     Optional<Driver> findByEmailAndPassword(String email, String password);
-    Optional<List<Driver>> findAllByAvailability(boolean availability);
+    List<Driver> findAllByAvailability(boolean availability);
 
     Optional<Driver> findByEmailOrUsername(String email, String username);
 }

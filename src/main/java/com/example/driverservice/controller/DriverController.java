@@ -50,8 +50,8 @@ public class DriverController {
         return driverService.changeStatus(id);
     }
 
-    @GetMapping("available")
-    public ResponseEntity<DriverDTO> findAvailableDriver() throws UserNotFoundException {
-        return driverService.findAvailableDriver();
-    }
+//    @GetMapping("available")
+//    public ResponseEntity<DriverDTO> findAvailableDriver() throws UserNotFoundException {
+//        return driverService.findAvailableDriver();
+//    }
 }
