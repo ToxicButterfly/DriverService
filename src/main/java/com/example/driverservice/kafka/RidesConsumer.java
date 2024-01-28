@@ -1,5 +1,6 @@
 package com.example.driverservice.kafka;
 
+import com.example.driverservice.dto.request.DriverRequest;
 import com.example.driverservice.exception.UserNotFoundException;
 import com.example.driverservice.service.DriverService;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +15,9 @@ public class RidesConsumer {
 
     private final DriverService driverService;
 
-    @KafkaListener(topics = "driver-search")
-    public void receiveMessage(Integer id)  {
-        log.info("Receiver request for Ride {}", id);
-        driverService.findAvailableDriver(id);
+    @KafkaListener(topics = "${topic.name.ride}")
+    public void receiveMessage(DriverRequest request)  {
+        log.info("Receiver request for Ride {}", request.getId());
+        driverService.findAvailableDriver(request.getId());
     }
 }

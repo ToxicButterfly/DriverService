@@ -1,10 +1,12 @@
 package com.example.driverservice.dto.request;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 @Builder
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class RideRequest {
     private Integer rideId;
     private Integer driverId;

@@ -6,6 +6,7 @@ import com.example.driverservice.dto.BankDataDto;
 import com.example.driverservice.dto.DriverDTO;
 import com.example.driverservice.dto.LoginDTO;
 import com.example.driverservice.dto.request.RideRequest;
+import com.example.driverservice.dto.request.UpdateRatingRequest;
 import com.example.driverservice.exception.InvalidLoginException;
 import com.example.driverservice.exception.UserNotFoundException;
 import com.example.driverservice.kafka.DriverProducer;
@@ -113,5 +114,10 @@ public class DriverService {
                 .balance(90000F)
                 .build();
         return new ResponseEntity<>(data, HttpStatus.OK);
+    }
+
+    public void updateRating(UpdateRatingRequest request) {
+        Driver driver = driverDAO.findById(request.getUId()).get();
+        driver.setRating(request.getRating());
     }
 }

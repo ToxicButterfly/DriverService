@@ -1,8 +1,13 @@
 package com.example.driverservice.kafka;
 
+import com.example.driverservice.dto.request.RideRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -10,10 +15,16 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class DriverProducer {
 
-    private final KafkaTemplate<String, Object> kafkaTemplate;
+    @Value("${topic.name.driver}")
+    private String driverTopic;
+    private final KafkaTemplate<String, RideRequest> kafkaTemplate;
 
-    public void sendMessage(Object message) {
-        log.info("Sending message {}", message);
-        kafkaTemplate.send("driver-available",message);
+    public void sendMessage(RideRequest request) {
+        log.info("Sending message {}", request);
+        Message<RideRequest> message = MessageBuilder
+                .withPayload(request)
+                .setHeader(KafkaHeaders.TOPIC, driverTopic)
+                .build();
+        kafkaTemplate.send(message);
     }
 }

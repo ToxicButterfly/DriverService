@@ -3,6 +3,7 @@ package com.example.driverservice.controller;
 import com.example.driverservice.dto.BankDataDto;
 import com.example.driverservice.dto.DriverDTO;
 import com.example.driverservice.dto.LoginDTO;
+import com.example.driverservice.dto.request.UpdateRatingRequest;
 import com.example.driverservice.exception.InvalidLoginException;
 import com.example.driverservice.exception.UserNotFoundException;
 import com.example.driverservice.model.Driver;
@@ -56,6 +57,10 @@ public class DriverController {
         return driverService.getBankData();
     }
 
+    @PutMapping("{id}/rating")
+    public void updateRating(@RequestBody UpdateRatingRequest request) {
+        driverService.updateRating(request);
+    }
 
 //    @GetMapping("available")
 //    public ResponseEntity<DriverDTO> findAvailableDriver() throws UserNotFoundException {
