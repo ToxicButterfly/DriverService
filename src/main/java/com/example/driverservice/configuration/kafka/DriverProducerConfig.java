@@ -28,12 +28,6 @@ public class DriverProducerConfig {
                 .replicas(REPLICAS_COUNT)
                 .build();
     }
-
-    @Bean
-    public StringJsonMessageConverter stringJsonMessageConverter() {
-        return new StringJsonMessageConverter();
-    }
-
 //    @Bean
 //    public ProducerFactory<String, Object> producerFactory() {
 //        Map<String, Object> props = Map.of(

@@ -8,7 +8,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/driverdb
   jpa:
     database: postgresql
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: validate
     properties:
@@ -19,22 +19,19 @@ spring:
   kafka:
     consumer:
       properties:
-        spring:
-          deserializer:
-            value:
-              delegate:
-                class: org.springframework.kafka.support.serializer.JsonDeserializer
-          json:
-            trusted:
-              packages: "*"
+        spring.json:
+          trusted.packages: "*"
+          type.mapping: DriverRequest:com.example.driverservice.dto.request.DriverRequest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      #value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       bootstrap-servers: localhost:9092
       group-id: driverGroup
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       bootstrap-servers: localhost:9092
+      properties:
+        spring.json.type.mapping: RideRequest:com.example.driverservice.dto.request.RideRequest
 topic:
   name:
     driver: driver-available
@@ -44,3 +41,5 @@ kafka:
     count: 5
   replicas:
     count: 1
+server:
+  port: 8085

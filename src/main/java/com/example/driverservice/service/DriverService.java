@@ -5,6 +5,7 @@ import com.example.driverservice.dao.DriverDAO;
 import com.example.driverservice.dto.BankDataDto;
 import com.example.driverservice.dto.DriverDTO;
 import com.example.driverservice.dto.LoginDTO;
+import com.example.driverservice.dto.RatingResponse;
 import com.example.driverservice.dto.request.RideRequest;
 import com.example.driverservice.dto.request.UpdateRatingRequest;
 import com.example.driverservice.exception.InvalidLoginException;
@@ -12,6 +13,7 @@ import com.example.driverservice.exception.UserNotFoundException;
 import com.example.driverservice.kafka.DriverProducer;
 import com.example.driverservice.model.Driver;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
+@Slf4j
 @AllArgsConstructor
 public class DriverService {
 
@@ -113,11 +116,20 @@ public class DriverService {
                 .expirationDate("12/26")
                 .balance(90000F)
                 .build();
+        log.info("Sending bank data");
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
-    public void updateRating(UpdateRatingRequest request) {
-        Driver driver = driverDAO.findById(request.getUId()).get();
+    public void updateRating(UpdateRatingRequest request, Integer id) {
+        Driver driver = driverDAO.findById(id).get();
         driver.setRating(request.getRating());
+        driverDAO.save(driver);
+    }
+
+    public ResponseEntity<RatingResponse> askOpinion(int id) {
+        Random random = new Random();
+        int r = 1 + random.nextInt(5);
+        log.info("Passenger rated {} points", r);
+        return new ResponseEntity<>(new RatingResponse(r), HttpStatus.OK);
     }
 }

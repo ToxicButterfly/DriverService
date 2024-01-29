@@ -2,7 +2,6 @@ package com.example.driverservice.dto.request;
 
 import lombok.*;
 
-@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
