@@ -11,6 +11,7 @@ import com.example.driverservice.kafka.DriverProducer;
 import com.example.driverservice.model.Driver;
 import com.example.driverservice.service.DriverService;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,8 @@ public class DriverServiceImpl implements DriverService {
     private final DriverDtoConverter driverDtoConverter;
     private final DriverProducer driverProducer;
 
-    public DriverDto register(Driver driver) throws InvalidLoginException {
+    @SneakyThrows
+    public DriverDto register(Driver driver) {
         if (driverRepo.findByEmailOrUsername(driver.getEmail(), driver.getUsername()).isPresent()) {
             throw new InvalidLoginException("Username or Email is already taken");
         }
@@ -40,14 +42,14 @@ public class DriverServiceImpl implements DriverService {
     }
 
     public DriversDto getAllDrivers() {
-        DriversDto drivers = new DriversDto(driverRepo.findAll()
+        return new DriversDto(driverRepo.findAll()
                 .stream()
                 .map(driverDtoConverter::convertDriverToDriverDto)
                 .toList());
-        return drivers;
     }
 
-    public DriverDto getDriver(LoginDto loginDto) throws InvalidLoginException {
+    @SneakyThrows
+    public DriverDto getDriver(LoginDto loginDto) {
         Driver driver = driverRepo.findByEmailAndPassword(loginDto.getEmail(), loginDto.getPassword())
                 .orElseThrow(() -> new InvalidLoginException("Invalid email or password"));
         return driverDtoConverter.convertDriverToDriverDto(driver);
@@ -66,14 +68,16 @@ public class DriverServiceImpl implements DriverService {
         return driverDtoConverter.convertDriverToDriverDto(driver);
     }
 
-    public DriverDto deleteDriver(int id) throws UserNotFoundException {
+    @SneakyThrows
+    public DriverDto deleteDriver(int id) {
         Driver driver = driverRepo.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("There's no such driver"));
         driverRepo.deleteById(id);
         return driverDtoConverter.convertDriverToDriverDto(driver);
     }
 
-    public DriverDto changeStatus(int id) throws UserNotFoundException {
+    @SneakyThrows
+    public DriverDto changeStatus(int id) {
         Driver driver = driverRepo.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("There's no such driver"));
         driver.setAvailability(!driver.isAvailability());
