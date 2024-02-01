@@ -16,4 +16,5 @@ public class LoginDto {
     private String email;
     @Size(min = 6, message = "Password must be atleast 6 symbold or longer")
     private String password;
+
 }

@@ -18,25 +18,25 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1/driver")
+@RequestMapping("api/v1/drivers")
 public class DriverController {
 
 
     final DriverServiceImpl driverService;
 
     @PostMapping
-    public ResponseEntity<DriverDto> registration(@RequestBody @Valid Driver driver) throws InvalidLoginException {
+    public ResponseEntity<DriverDto> registration(@RequestBody @Valid Driver driver) {
         return ResponseEntity.status(HttpStatus.CREATED).body(driverService.register(driver));
     }
 
     @GetMapping
-    public ResponseEntity<DriversDto> getAllDrivers() throws UserNotFoundException {
+    public ResponseEntity<DriversDto> getAllDrivers() {
         return ResponseEntity.ok(driverService.getAllDrivers());
     }
 
     @PostMapping("login")
-    public ResponseEntity<DriverDto> getDriver(@RequestBody @Valid LoginDto loginDTO) throws InvalidLoginException {
-        return ResponseEntity.ok(driverService.getDriver(loginDTO));
+    public ResponseEntity<DriverDto> getDriver(@RequestBody @Valid LoginDto loginDto) {
+        return ResponseEntity.ok(driverService.getDriver(loginDto));
     }
 
     @PutMapping("/{id}")
@@ -45,12 +45,12 @@ public class DriverController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<DriverDto> deleteDriver(@PathVariable int id) throws UserNotFoundException {
+    public ResponseEntity<DriverDto> deleteDriver(@PathVariable int id) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(driverService.deleteDriver(id));
     }
 
     @PatchMapping("status/{id}")
-    public ResponseEntity<DriverDto> changeStatus(@PathVariable int id) throws UserNotFoundException {
+    public ResponseEntity<DriverDto> changeStatus(@PathVariable int id) {
         return ResponseEntity.ok(driverService.changeStatus(id));
     }
 

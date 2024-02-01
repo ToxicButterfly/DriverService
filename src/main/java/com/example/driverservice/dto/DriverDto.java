@@ -19,4 +19,5 @@ public class DriverDto {
     private Date registerDate;
     private boolean availability;
     private Float rating;
+
 }

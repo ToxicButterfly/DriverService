@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BankDataDto {
-
     private String cardNumber;
     private String expirationDate;
     private String cvv;
     private Float balance;
+
 }

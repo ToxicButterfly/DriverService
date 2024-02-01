@@ -2,22 +2,24 @@ package com.example.driverservice.service.impl;
 
 import com.example.driverservice.convert.DriverDtoConverter;
 import com.example.driverservice.dto.*;
-import com.example.driverservice.repo.DriverRepo;
 import com.example.driverservice.dto.request.RideRequest;
 import com.example.driverservice.dto.request.UpdateRatingRequest;
 import com.example.driverservice.exception.InvalidLoginException;
 import com.example.driverservice.exception.UserNotFoundException;
 import com.example.driverservice.kafka.DriverProducer;
 import com.example.driverservice.model.Driver;
+import com.example.driverservice.repo.DriverRepo;
 import com.example.driverservice.service.DriverService;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
+
+import static com.example.driverservice.util.Messages.*;
 
 @Service
 @Slf4j
@@ -31,7 +33,7 @@ public class DriverServiceImpl implements DriverService {
     @SneakyThrows
     public DriverDto register(Driver driver) {
         if (driverRepo.findByEmailOrUsername(driver.getEmail(), driver.getUsername()).isPresent()) {
-            throw new InvalidLoginException("Username or Email is already taken");
+            throw new InvalidLoginException(INVALID_LOGIN_MESSAGE);
         }
         driver.setAvailability(true);
         driver.setRating(3.0F);
@@ -51,7 +53,7 @@ public class DriverServiceImpl implements DriverService {
     @SneakyThrows
     public DriverDto getDriver(LoginDto loginDto) {
         Driver driver = driverRepo.findByEmailAndPassword(loginDto.getEmail(), loginDto.getPassword())
-                .orElseThrow(() -> new InvalidLoginException("Invalid email or password"));
+                .orElseThrow(() -> new InvalidLoginException(INVALID_LOGIN_MESSAGE));
         return driverDtoConverter.convertDriverToDriverDto(driver);
 
     }
@@ -71,7 +73,7 @@ public class DriverServiceImpl implements DriverService {
     @SneakyThrows
     public DriverDto deleteDriver(int id) {
         Driver driver = driverRepo.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("There's no such driver"));
+                .orElseThrow(() -> new UserNotFoundException(DRIVER_NOT_FOUND_MESSAGE));
         driverRepo.deleteById(id);
         return driverDtoConverter.convertDriverToDriverDto(driver);
     }
@@ -79,7 +81,7 @@ public class DriverServiceImpl implements DriverService {
     @SneakyThrows
     public DriverDto changeStatus(int id) {
         Driver driver = driverRepo.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("There's no such driver"));
+                .orElseThrow(() -> new UserNotFoundException(DRIVER_NOT_FOUND_MESSAGE));
         driver.setAvailability(!driver.isAvailability());
         driverRepo.save(driver);
         return driverDtoConverter.convertDriverToDriverDto(driver);
@@ -101,10 +103,10 @@ public class DriverServiceImpl implements DriverService {
 
     public BankDataDto getBankData() {
         BankDataDto data = BankDataDto.builder()
-                .cvv("123")
-                .cardNumber("1234567890123456")
-                .expirationDate("12/26")
-                .balance(90000F)
+                .cvv(CVV)
+                .cardNumber(CARD_NUMBER)
+                .expirationDate(EXPIRATION_DATE)
+                .balance(BALANCE)
                 .build();
         log.info("Sending bank data");
         return data;
