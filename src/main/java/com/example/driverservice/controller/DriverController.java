@@ -22,7 +22,7 @@ import java.util.List;
 public class DriverController {
 
 
-    final DriverServiceImpl driverService;
+    private final DriverService driverService;
 
     @PostMapping
     public ResponseEntity<DriverDto> registration(@RequestBody @Valid Driver driver) {

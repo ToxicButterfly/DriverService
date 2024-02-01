@@ -7,12 +7,12 @@ import com.example.driverservice.exception.UserNotFoundException;
 import com.example.driverservice.model.Driver;
 
 public interface DriverService {
-    DriverDto register(Driver driver) throws InvalidLoginException;
+    DriverDto register(Driver driver);
     DriversDto getAllDrivers();
-    DriverDto getDriver(LoginDto loginDto) throws InvalidLoginException;
+    DriverDto getDriver(LoginDto loginDto);
     DriverDto addOrUpdateDriver(Driver driver, int id);
-    DriverDto deleteDriver(int id) throws UserNotFoundException;
-    DriverDto changeStatus(int id) throws UserNotFoundException;
+    DriverDto deleteDriver(int id);
+    DriverDto changeStatus(int id);
     void findAvailableDriver(Integer id);
     BankDataDto getBankData();
     void updateRating(UpdateRatingRequest request, Integer id);

@@ -44,8 +44,7 @@ public class DriverServiceImpl implements DriverService {
     }
 
     public DriversDto getAllDrivers() {
-        return new DriversDto(driverRepo.findAll()
-                .stream()
+        return new DriversDto(driverRepo.findAll().stream()
                 .map(driverDtoConverter::convertDriverToDriverDto)
                 .toList());
     }
@@ -72,16 +71,14 @@ public class DriverServiceImpl implements DriverService {
 
     @SneakyThrows
     public DriverDto deleteDriver(int id) {
-        Driver driver = driverRepo.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(DRIVER_NOT_FOUND_MESSAGE));
+        Driver driver = getOrThrow(id);
         driverRepo.deleteById(id);
         return driverDtoConverter.convertDriverToDriverDto(driver);
     }
 
     @SneakyThrows
     public DriverDto changeStatus(int id) {
-        Driver driver = driverRepo.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(DRIVER_NOT_FOUND_MESSAGE));
+        Driver driver = getOrThrow(id);
         driver.setAvailability(!driver.isAvailability());
         driverRepo.save(driver);
         return driverDtoConverter.convertDriverToDriverDto(driver);
@@ -123,5 +120,11 @@ public class DriverServiceImpl implements DriverService {
         int r = 1 + random.nextInt(5);
         log.info("Passenger rated {} points", r);
         return new RatingResponse(r);
+    }
+
+    @SneakyThrows
+    Driver getOrThrow(Integer id) {
+        return driverRepo.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(DRIVER_NOT_FOUND_MESSAGE));
     }
 }
