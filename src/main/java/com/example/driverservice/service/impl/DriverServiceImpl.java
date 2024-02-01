@@ -40,11 +40,9 @@ public class DriverServiceImpl implements DriverService {
     }
 
     public DriversDto getAllDrivers() {
-        DriversDto drivers = new DriversDto(driverRepo.findAll()
-                .stream()
+        return new DriversDto(driverRepo.findAll().stream()
                 .map(driverDtoConverter::convertDriverToDriverDto)
                 .toList());
-        return drivers;
     }
 
     public DriverDto getDriver(LoginDto loginDto) throws InvalidLoginException {
