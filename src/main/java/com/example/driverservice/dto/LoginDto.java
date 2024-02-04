@@ -7,14 +7,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static com.example.driverservice.util.Messages.NON_VALID_EMAIL_MESSAGE;
+import static com.example.driverservice.util.Messages.NON_VALID_PASSWORD_MESSAGE;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginDto {
-    @Email(message = "Email should be valid")
+    @Email(message = NON_VALID_EMAIL_MESSAGE)
     private String email;
-    @Size(min = 6, message = "Password must be atleast 6 symbold or longer")
+    @Size(min = 6, message = NON_VALID_PASSWORD_MESSAGE)
     private String password;
 
 }

@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+import static com.example.driverservice.util.Messages.*;
+
 @Entity
 @Data
 @Builder
@@ -23,13 +25,13 @@ public class Driver {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @NotEmpty(message = "Your name field must not be empty")
+    @NotEmpty(message = EMPTY_NAME_MESSAGE)
     private String fullName;
-    @NotEmpty(message = "Your username field must not be empty")
+    @NotEmpty(message = EMPTY_USERNAME_MESSAGE)
     private String username;
-    @Email(message = "Email should be valid")
+    @Email(message = NON_VALID_EMAIL_MESSAGE)
     private String email;
-    @Size(min = 6, message = "Password must be atleast 6 symbold or longer")
+    @Size(min = 6, message = NON_VALID_PASSWORD_MESSAGE)
     private String password;
     private Date registerDate;
     private boolean availability;
