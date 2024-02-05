@@ -1,57 +1,71 @@
 package com.example.driverservice.controller;
 
-import com.example.driverservice.dto.DriverDTO;
-import com.example.driverservice.dto.LoginDTO;
+import com.example.driverservice.dto.*;
+import com.example.driverservice.dto.request.UpdateRatingRequest;
 import com.example.driverservice.exception.InvalidLoginException;
 import com.example.driverservice.exception.UserNotFoundException;
 import com.example.driverservice.model.Driver;
 import com.example.driverservice.service.DriverService;
+import com.example.driverservice.service.impl.DriverServiceImpl;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/driver")
+@RequiredArgsConstructor
+@RequestMapping("api/v1/drivers")
 public class DriverController {
 
-    @Autowired
-    DriverService driverService;
 
-    @PostMapping("register")
-    public ResponseEntity<DriverDTO> registration(@RequestBody @Valid Driver driver) throws InvalidLoginException {
-        return driverService.register(driver);
+    private final DriverService driverService;
+
+    @PostMapping
+    public ResponseEntity<DriverDto> registration(@RequestBody @Valid Driver driver) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(driverService.register(driver));
     }
 
-    @GetMapping("")
-    public ResponseEntity<List<DriverDTO>> getAllDrivers() throws UserNotFoundException {
-        return driverService.getAllDrivers();
+    @GetMapping
+    public ResponseEntity<DriversDto> getAllDrivers() {
+        return ResponseEntity.ok(driverService.getAllDrivers());
     }
 
     @PostMapping("login")
-    public ResponseEntity<DriverDTO> getDriver(@RequestBody @Valid LoginDTO loginDTO) throws InvalidLoginException {
-        return driverService.getDriver(loginDTO);
+    public ResponseEntity<DriverDto> getDriver(@RequestBody @Valid LoginDto loginDto) {
+        return ResponseEntity.ok(driverService.getDriver(loginDto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DriverDTO> updateDriver(@RequestBody @Valid Driver driver, @PathVariable int id) {
-        return driverService.addOrUpdateDriver(driver, id);
+    public ResponseEntity<DriverDto> updateDriver(@RequestBody @Valid Driver driver, @PathVariable int id) {
+        return ResponseEntity.ok(driverService.addOrUpdateDriver(driver, id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<DriverDTO> deleteDriver(@PathVariable int id) throws UserNotFoundException {
-        return driverService.deleteDriver(id);
+    public ResponseEntity<DriverDto> deleteDriver(@PathVariable int id) {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(driverService.deleteDriver(id));
     }
 
     @PatchMapping("status/{id}")
-    public ResponseEntity<DriverDTO> changeStatus(@PathVariable int id) throws UserNotFoundException {
-        return driverService.changeStatus(id);
+    public ResponseEntity<DriverDto> changeStatus(@PathVariable int id) {
+        return ResponseEntity.ok(driverService.changeStatus(id));
     }
 
-    @GetMapping("available")
-    public ResponseEntity<DriverDTO> findAvailableDriver() throws UserNotFoundException {
-        return driverService.findAvailableDriver();
+    @GetMapping("{id}/bank")
+    public ResponseEntity<BankDataDto> getBankData(@PathVariable int id) {
+        return ResponseEntity.ok(driverService.getBankData());
+    }
+
+    @GetMapping("{id}/rating")
+    public ResponseEntity<RatingResponse> askOpinion(@PathVariable int id) {
+        return ResponseEntity.ok(driverService.askOpinion(id));
+    }
+
+    @PutMapping("{id}/rating")
+    public void updateRating(@RequestBody UpdateRatingRequest request, @PathVariable int id) {
+        driverService.updateRating(request, id);
     }
 }

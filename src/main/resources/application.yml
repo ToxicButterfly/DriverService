@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: driver-service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    password: 12345
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/driverdb
+  jpa:
+    database: postgresql
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+  kafka:
+    consumer:
+      properties:
+        spring.json:
+          trusted.packages: "*"
+          type.mapping: DriverRequest:com.example.driverservice.dto.request.DriverRequest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      bootstrap-servers: localhost:9092
+      group-id: driverGroup
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      bootstrap-servers: localhost:9092
+      properties:
+        spring.json.type.mapping: RideRequest:com.example.driverservice.dto.request.RideRequest
+topic:
+  name:
+    driver: driver-available
+    ride: driver-search
+kafka:
+  partitions:
+    count: 5
+  replicas:
+    count: 1
+server:
+  port: 8085
