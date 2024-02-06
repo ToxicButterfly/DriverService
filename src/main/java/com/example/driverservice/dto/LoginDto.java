@@ -7,9 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import static com.example.driverservice.util.Messages.NON_VALID_EMAIL_MESSAGE;
-import static com.example.driverservice.util.Messages.NON_VALID_PASSWORD_MESSAGE;
-
+import static com.example.driverservice.util.Messages.*;
 @Data
 @Builder
 @AllArgsConstructor
