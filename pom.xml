@@ -23,6 +23,7 @@
 		<postgresql.version>42.6.0</postgresql.version>
 		<liquibase.version>4.25.1</liquibase.version>
 		<spring-cloud.version>2023.0.0</spring-cloud.version>
+		<cucumber.version>7.14.0</cucumber.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -102,6 +103,26 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-spring</artifactId>
+			<version>${cucumber.version}</version>
 		</dependency>
 
 	</dependencies>
