@@ -99,37 +99,37 @@ public class DriverControllerTest {
                         "\"rating\":3.0}]}\n"));
     }
 
-    @Test
-    void getDriver_shouldReturnDriverDto_whenLoginValid() throws Exception {
-        DriverDto driverDto = getDefaultDriverDto();
-        doReturn(Optional.of(getDefaultDriver())).when(driverRepo).findByEmailAndPassword("Vano228@tut.by", "Vanya228");
-        doReturn(driverDto).when(driverDtoConverter).convertDriverToDriverDto(any(Driver.class));
+//    @Test
+//    void getDriver_shouldReturnDriverDto_whenLoginValid() throws Exception {
+//        DriverDto driverDto = getDefaultDriverDto();
+//        doReturn(Optional.of(getDefaultDriver())).when(driverRepo).findByEmailAndPassword("Vano228@tut.by", "Vanya228");
+//        doReturn(driverDto).when(driverDtoConverter).convertDriverToDriverDto(any(Driver.class));
+//
+//        mockMvc.perform(post("/api/v1/drivers/login").content("{\n" +
+//                "    \"email\": \"Vano228@tut.by\",\n" +
+//                "    \"password\": \"Vanya228\"\n" +
+//                "}").contentType("application/json"))
+//                .andExpect(status().isOk())
+//                .andExpect(content().json("{\"id\":1," +
+//                        "\"fullName\":\"Default fullname\"," +
+//                        "\"username\":\"Username\"," +
+//                        "\"email\":\"SomeEmail@Gmail.com\"," +
+//                        "\"registerDate\":\"3923-12-31T21:00:00.000+00:00\"," +
+//                        "\"availability\":true," +
+//                        "\"rating\":3.0}\n"));
+//    }
 
-        mockMvc.perform(post("/api/v1/drivers/login").content("{\n" +
-                "    \"email\": \"Vano228@tut.by\",\n" +
-                "    \"password\": \"Vanya228\"\n" +
-                "}").contentType("application/json"))
-                .andExpect(status().isOk())
-                .andExpect(content().json("{\"id\":1," +
-                        "\"fullName\":\"Default fullname\"," +
-                        "\"username\":\"Username\"," +
-                        "\"email\":\"SomeEmail@Gmail.com\"," +
-                        "\"registerDate\":\"3923-12-31T21:00:00.000+00:00\"," +
-                        "\"availability\":true," +
-                        "\"rating\":3.0}\n"));
-    }
-
-    @Test
-    void getDriver_shouldReturnInvalidLoginResponse_whenLoginInvalid() throws Exception {
-        doReturn(Optional.empty()).when(driverRepo).findByEmailAndPassword("Vano228@tut.by", "Vanya228");
-
-        mockMvc.perform(post("/api/v1/drivers/login").content("{\n" +
-                        "    \"email\": \"Vano228@tut.by\",\n" +
-                        "    \"password\": \"Vanya228\"\n" +
-                        "}").contentType("application/json"))
-                .andExpect(status().isUnauthorized())
-                .andExpect(content().json("{\"errorMessage\":\"Username or Email is already taken\"}"));
-    }
+//    @Test
+//    void getDriver_shouldReturnInvalidLoginResponse_whenLoginInvalid() throws Exception {
+//        doReturn(Optional.empty()).when(driverRepo).findByEmailAndPassword("Vano228@tut.by", "Vanya228");
+//
+//        mockMvc.perform(post("/api/v1/drivers/login").content("{\n" +
+//                        "    \"email\": \"Vano228@tut.by\",\n" +
+//                        "    \"password\": \"Vanya228\"\n" +
+//                        "}").contentType("application/json"))
+//                .andExpect(status().isUnauthorized())
+//                .andExpect(content().json("{\"errorMessage\":\"Username or Email is already taken\"}"));
+//    }
 
     @Test
     void updateDriver_shouldReturnDriverDto_whenDriverValid() throws Exception {

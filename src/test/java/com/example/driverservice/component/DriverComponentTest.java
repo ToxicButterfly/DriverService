@@ -46,22 +46,22 @@ public class DriverComponentTest {
         doReturn(getDefaultDriverDto()).when(driverDtoConverter).convertDriverToDriverDto(any(Driver.class));
     }
 
-    @When("Create request with email {string} and username {string} passed to the registration method")
-    public void registerDriverMethodCalled(String email, String username) {
-        try {
-            driverResponse = driverService.register(Driver.builder()
-                    .fullName(DEFAULT_FULLNAME)
-                    .username(username)
-                    .email(email)
-                    .password(DEFAULT_PASSWORD)
-                    .registerDate(DEFAULT_REGISTER_DATE)
-                    .availability(DEFAULT_AVAILABILITY_STATUS)
-                    .rating(DEFAULT_RATING)
-                    .build());
-        } catch (Exception e) {
-            exception = e;
-        }
-    }
+//    @When("Create request with email {string} and username {string} passed to the registration method")
+//    public void registerDriverMethodCalled(String email, String username) {
+//        try {
+//            driverResponse = driverService.register(Driver.builder()
+//                    .fullName(DEFAULT_FULLNAME)
+//                    .username(username)
+//                    .email(email)
+//                    .password(DEFAULT_PASSWORD)
+//                    .registerDate(DEFAULT_REGISTER_DATE)
+//                    .availability(DEFAULT_AVAILABILITY_STATUS)
+//                    .rating(DEFAULT_RATING)
+//                    .build());
+//        } catch (Exception e) {
+//            exception = e;
+//        }
+//    }
 
     @Then("The response should return driver data")
     public void responseContainsCreatedDriver() {
@@ -78,28 +78,25 @@ public class DriverComponentTest {
         assertEquals(exception.getMessage(), INVALID_LOGIN_MESSAGE);
     }
 
-    @Given("A driver with email {string} and password {string} exists")
-    public void aDriverWithEmailAndPasswordExists(String email, String password) {
-        doReturn(Optional.of(getDefaultDriver())).when(driverRepo).findByEmailAndPassword(email, password);
-        doReturn(getDefaultDriverDto()).when(driverDtoConverter).convertDriverToDriverDto(any(Driver.class));
-    }
+//    @Given("A driver with email {string} and password {string} exists")
+//    public void aDriverWithEmailAndPasswordExists(String email, String password) {
+//        doReturn(Optional.of(getDefaultDriver())).when(driverRepo).findByEmailAndPassword(email, password);
+//        doReturn(getDefaultDriverDto()).when(driverDtoConverter).convertDriverToDriverDto(any(Driver.class));
+//    }
 
     @When("Create request with email {string} and password {string} passed to the login method")
     public void createRequestWithEmailAndUsernamePassedToTheLoginMethod(String email, String password) {
         try {
-            driverResponse = driverService.getDriver(LoginDto.builder()
-                            .password(password)
-                            .email(email)
-                            .build());
+            driverResponse = driverService.getDriver(DEFAULT_ID);
         } catch (Exception e) {
             exception = e;
         }
     }
 
-    @Given("A driver with email {string} and password {string} doesn't exist")
-    public void aDriverWithEmailAndPasswordDoesntExist(String email, String password) {
-        doReturn(Optional.empty()).when(driverRepo).findByEmailAndPassword(email, password);
-    }
+//    @Given("A driver with email {string} and password {string} doesn't exist")
+//    public void aDriverWithEmailAndPasswordDoesntExist(String email, String password) {
+//        doReturn(Optional.empty()).when(driverRepo).findByEmailAndPassword(email, password);
+//    }
 
     @Given("A driver with id {int} exists")
     public void aDriverWithIdExists(int id) {

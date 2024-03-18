@@ -2,6 +2,8 @@ package com.example.driverservice.service.impl;
 
 import com.example.driverservice.convert.DriverDtoConverter;
 import com.example.driverservice.dto.*;
+import com.example.driverservice.dto.request.DriverCreateRequest;
+import com.example.driverservice.dto.request.DriverRequest;
 import com.example.driverservice.dto.request.RideRequest;
 import com.example.driverservice.dto.request.UpdateRatingRequest;
 import com.example.driverservice.exception.InvalidLoginException;
@@ -31,14 +33,20 @@ public class DriverServiceImpl implements DriverService {
     private final DriverProducer driverProducer;
 
     @SneakyThrows
-    public DriverDto register(Driver driver) {
-        if (driverRepo.findByEmailOrUsername(driver.getEmail(), driver.getUsername()).isPresent()) {
+    public DriverDto register(DriverCreateRequest request) {
+        if (driverRepo.findByEmailOrUsername(request.getEmail(), request.getUsername()).isPresent()) {
             throw new InvalidLoginException(INVALID_LOGIN_MESSAGE);
         }
-        driver.setAvailability(true);
-        driver.setRating(3.0F);
-        Date current = new Date();
-        driver.setRegisterDate(current);
+
+        Driver driver = Driver.builder()
+                .fullName(request.getFullName())
+                .username(request.getUsername())
+                .email(request.getEmail())
+                .registerDate(new Date())
+                .availability(true)
+                .rating(3.0F)
+                .build();
+
         driverRepo.save(driver);
         return driverDtoConverter.convertDriverToDriverDto(driver);
     }
@@ -50,9 +58,9 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @SneakyThrows
-    public DriverDto getDriver(LoginDto loginDto) {
-        Driver driver = driverRepo.findByEmailAndPassword(loginDto.getEmail(), loginDto.getPassword())
-                .orElseThrow(() -> new InvalidLoginException(INVALID_LOGIN_MESSAGE));
+    public DriverDto getDriver(int id) {
+        Driver driver = driverRepo.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(DRIVER_NOT_FOUND_MESSAGE));
         return driverDtoConverter.convertDriverToDriverDto(driver);
 
     }
@@ -84,15 +92,16 @@ public class DriverServiceImpl implements DriverService {
         return driverDtoConverter.convertDriverToDriverDto(driver);
     }
 
-    public void findAvailableDriver(Integer id) {
+    public void findAvailableDriver(DriverRequest driverRequest) {
         List<Driver> drivers = driverRepo.findAllByAvailability(true);
         if (!drivers.isEmpty()) {
             Random random = new Random();
             int r = random.nextInt(drivers.size());
             RideRequest request = RideRequest.builder()
-                    .rideId(id)
+                    .rideId(driverRequest.getId())
                     .driverId(drivers.get(r).getId())
                     .driverRating(drivers.get(r).getRating())
+                    .token(driverRequest.getToken())
                     .build();
             driverProducer.sendMessage(request);
         }

@@ -1,6 +1,7 @@
 package com.example.driverservice.controller;
 
 import com.example.driverservice.dto.*;
+import com.example.driverservice.dto.request.DriverCreateRequest;
 import com.example.driverservice.dto.request.UpdateRatingRequest;
 import com.example.driverservice.exception.InvalidLoginException;
 import com.example.driverservice.exception.UserNotFoundException;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +27,8 @@ public class DriverController {
     private final DriverService driverService;
 
     @PostMapping
-    public ResponseEntity<DriverDto> registration(@RequestBody @Valid Driver driver) {
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
+    public ResponseEntity<DriverDto> registration(@RequestBody @Valid DriverCreateRequest driver) {
         return ResponseEntity.status(HttpStatus.CREATED).body(driverService.register(driver));
     }
 
@@ -34,22 +37,25 @@ public class DriverController {
         return ResponseEntity.ok(driverService.getAllDrivers());
     }
 
-    @PostMapping("login")
-    public ResponseEntity<DriverDto> getDriver(@RequestBody @Valid LoginDto loginDto) {
-        return ResponseEntity.ok(driverService.getDriver(loginDto));
+    @GetMapping("/{id}")
+    public ResponseEntity<DriverDto> getDriver(@PathVariable int id) {
+        return ResponseEntity.ok(driverService.getDriver(id));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
     public ResponseEntity<DriverDto> updateDriver(@RequestBody @Valid Driver driver, @PathVariable int id) {
         return ResponseEntity.ok(driverService.addOrUpdateDriver(driver, id));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<DriverDto> deleteDriver(@PathVariable int id) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(driverService.deleteDriver(id));
     }
 
     @PatchMapping("status/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
     public ResponseEntity<DriverDto> changeStatus(@PathVariable int id) {
         return ResponseEntity.ok(driverService.changeStatus(id));
     }

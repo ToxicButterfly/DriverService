@@ -31,7 +31,6 @@ public class TestUtils {
                 .fullName(DEFAULT_FULLNAME)
                 .username(DEFAULT_USERNAME)
                 .email(DEFAULT_EMAIL)
-                .password(DEFAULT_PASSWORD)
                 .build();
     }
 
@@ -41,7 +40,6 @@ public class TestUtils {
                 .fullName(DEFAULT_FULLNAME)
                 .username(DEFAULT_USERNAME)
                 .email(DEFAULT_EMAIL)
-                .password(DEFAULT_PASSWORD)
                 .registerDate(DEFAULT_REGISTER_DATE)
                 .availability(DEFAULT_AVAILABILITY_STATUS)
                 .rating(DEFAULT_RATING)
@@ -54,7 +52,6 @@ public class TestUtils {
                 .fullName(DEFAULT_FULLNAME)
                 .username(DEFAULT_USERNAME)
                 .email(DEFAULT_EMAIL)
-                .password(DEFAULT_PASSWORD)
                 .registerDate(DEFAULT_REGISTER_DATE)
                 .availability(UNAVAILABLE_STATUS)
                 .rating(DEFAULT_RATING)

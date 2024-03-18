@@ -17,6 +17,6 @@ public class RidesConsumer {
     @KafkaListener(topics = "${topic.name.ride}")
     public void receiveMessage(DriverRequest request)  {
         log.info("Receiver request for Ride {}", request.getId());
-        driverService.findAvailableDriver(request.getId());
+        driverService.findAvailableDriver(request);
     }
 }
